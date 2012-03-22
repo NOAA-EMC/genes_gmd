@@ -12,8 +12,8 @@
 
 \SVN $Revision$
 
-\newcommand{\pstyle}{myheadings}
-%\newcommand{\pstyle}{plain}
+%\newcommand{\pstyle}{myheadings}
+\newcommand{\pstyle}{plain}
 \newfont{\ff}{cmsl12}
 
 \newcommand{\wwt}{WAVEWATCH III$\:$\textsuperscript\textregistered}
@@ -130,10 +130,11 @@ Hendrik l. Tolman$^\ddag$
 Environmental Modeling Center \\
 Marine Modeling and Analysis Branch
 
-\vspace{25mm}
+\vspace{20mm}
 
-\today\ (DRAFT, Revision: \SVNRevision)
-%Version 1.0, December 2010
+%Version 1.0, December 2010 \\
+Version 1.1, March 2012 \\
+%Version 1.2 \today\ (DRAFT, Revision: \SVNRevision)
 
 \vfill {\sc this is an unreviewed manuscript, primarily
 intended for informal exchange of information among ncep staff
@@ -168,20 +169,25 @@ wave model.
 
 \vspace{\baselineskip}
 \vspace{\baselineskip}
-\vspace{\baselineskip}
 
 \begin{center}
 {\bf Change log} \\
 \vspace{\baselineskip}
 \begin{tabular}{|c|c|c|c|l|} \hline
-ver. & WW   & rev. $^*$   & date    & comment    \\ \hline \hline
- 1.0 & 3.15 &  11596 & December 23, 2010 & Initial MMAB No. 289.        \\
-     &      &        &                   & Experimental WW version      \\
-     &      &        &                   & used for \cite{tol:MMAB10d}. \\
- 1.1 & 3.15 & \SVNRevision & \today      & Draft work version           \\
-\hline \end{tabular}
+ver. &   WW   & rev. $^*$   & date    & comment    \\ \hline \hline
+ 1.0 & 3.15.1 &  11596 & December 23, 2010 & Initial MMAB No. 289.          \\
+     &        &        &                   & Experimental WW version        \\
+     &        &        &                   & used for \cite{tol:MMAB10d}.   \\ \hline
+ 1.1 & 3.15.2 &  \SVNRevision &  March 22, 2012   & Bug fixes up to 3.14.13        \\
+     &        &        &                   & Transition to 'zeus' and Intel.\\ \hline
+% 1.2 &  4.xx  & \SVNRevision & \today      & Transition of GMD to           \\
+%     &        &        &                   & development trunk .            \\ \hline 
+\end{tabular}
 \end{center}
-\hfill $^*$) svn revision number refers to manual and software package.
+
+\hspace{55mm} $^*$) svn revision number refers to manual.
+
+\hspace{59mm}  Check tags for software package.
 
 \vfill \pagebreak
 
@@ -229,11 +235,11 @@ This report describes a portable package of scripts and {\F fortran} programs
 that has been designed to work transparently with the \wwt\ wave modeling
 framework \citep[model henceforth denoted as \ws]{tol:MMAB09a} to perform the
 genetic optimization \citep[e.g.,][]{bk:ES03} of the Generalized Multiple DIA
-\citep[\gmd,][]{tol:MMAB10d}.  In this report, fonts as used in the \ws\
-manual are used, with the {\file file, program and directory names}, {\code
-code and variables in scripts and command lines}, and {\F fortran} source code
-identified by the fonts used here. Familiarity with the \ws\ code and manuals
-is assumed.
+\citep[\gmd,][]{tol:MMAB10d, tol:OMODgmd1, tol:OMODgmd2}.  In this report,
+fonts as used in the \ws\ manual are used, with the {\file file, program and
+directory names}, {\code code and variables in scripts and command lines}, and
+{\F fortran} source code identified by the fonts used here. Familiarity with
+the \ws\ code and manuals is assumed.
 
 Section~\ref{sec:pack_desc} describes elements of the packages, and
 Section~\ref{sec:pack_use} describes how to use this package.
@@ -510,9 +516,9 @@ main directory {\file \$genes\_main} in the package. If another directory name
 is desired, this directory name needs to be modified before the next step of
 the initialization. Co-developers of \ws\ can alternatively obtain this
 directory with its contents from the subversion repository at
-NCEP\footnote{~The tar file is created from the ./utilities/genes\_gmd/package
-directory under the trunk.}.  The basic setup of the package is finished by
-executing
+NCEP\footnote{~https://svnemc.ncep.noaa.gov/projects/ww3\_utils/trunk/genes\_gmd
+or look for tags under https://svnemc.ncep.noaa.gov/projects/ww3\_utils/tags}
+The basic setup of the package is finished by executing
 \begin{center}
 {\file run\_setup.sh}
 \end{center}
@@ -764,7 +770,7 @@ with several Matlab scripts have been used to generate most of the graphics in
 
 \vspace{\baselineskip}
 \noindent
-This completes the setup of the test environment. the next step is to set up
+This completes the setup of the test environment. The next step is to set up
 the \gmd\ model for optimization. Before this is discussed, it is important to
 understand the file and directory structure used to perform the optimization
 and to save the relevant intermediate and final data. The directory and file
@@ -773,7 +779,7 @@ performed so far, the three main directories have been defined by running
 {\file run\_setup.sh}, and can be redefined by rerunning this script or by
 manually editing the file {\file .genes.env} in the users home directory. The
 directories with baseline information (identified here as {\file WRT}, {\file
-WAM} and {\file WW3}, actual names set by used) have already been created and
+WAM} and {\file WW3}, actual names set by user) have already been created and
 filled by running {\file run\_base.sh} and either {\file run\_comp.sh} or
 {\file run\_comp.all}. There are two levels of directories to hold the actual
 generational, descent and error mapping data from the optimization approach
@@ -796,12 +802,14 @@ script is illustrated in Fig.~\ref{fig:control}. Running the command
 \noindent
 will get the optimization procedure started, or will continue it. When
 starting a new (part of an) experiment, this script should be run
-interactively first to set up the necessary directories and files. If the
+interactively first to set up the necessary directories and files.  If the
 script is run to start a new experiment, {\file run\_setup.sh} should be run
-first to set up the proper data directories.
-
-Note that if work is to be continued on an existing experiment, the
-environment of the experiment can be restored by running
+first to set up the proper data directories. Furthermore, all environment
+files marked with '(c)' in Fig.~\ref{fig:genes_dirs} need to be set up
+properly in the main directory {\code \$genes\_main} before {\file control.sh}
+is executed for the first time.  Note that if work is to be continued on an
+existing experiment, the environment of the experiment can be restored by
+running
 \begin{center}
 {\file reset.sh} {\code \$genes\_exp1} {\code \$genes\_exp2}
 \end{center}
@@ -847,9 +855,10 @@ discussed above).
 The next step is to check if the experiment has been started by generating an
 initial generation. If this generation is not present, the script {\file
 make\_init.sh} using the program {\file initgen.x} is used to produce the
-first generation. Note only the \gmd\ setup according to information in the
-setup ({\file *.env} file) is produced, but that errors are not yet. To
-indicate this, errors are set to 999.999.
+first generation. This sets up the initial \gmd\ generation according to
+information in the setup ({\file *.env} file) is produced, and checks that
+errors are not yet computed. To indicate the, errors are initialized at
+999.999.
 
 Following this, the program {\file chckgen.x} checks the population for cases
 for which the error still needs to be evaluated. For each such population
@@ -964,7 +973,19 @@ time. The latter indicates a failure in the optimization attempt, or reaching
 the required number of generations. Each call of {\file control.sh} has its
 own output file {\file control.{\it nnnn}.out} for later inspection. Here
 {\file {\it nnnn}} identifies the sequence number of runs of {\file
-control.sh}, not the generation number.
+control.sh}, not the generation number. Finally, to cleanly stop the
+optimization process managed by {\file control.cycle} and {\file control.sh},
+execute the command 
+\begin{center}
+{\file control.stop}
+\end{center}
+\noindent
+which updates information in the file temporary file {\file control.status}.
+This file is queried by the {\file control.cycle} and {\file control.sh} to
+decide keep providing new cases to the compute engine, and the file is removed
+as the scripts complete. Note that all started computations are completed
+before the scripts stop, so that {\file control.stop} does not result in an
+immediate stopping of the optimization scripts.
 
 \vspace{\baselineskip}
 \noindent
@@ -994,21 +1015,24 @@ provided with the package are:
 \begin{plist}
 \pit{single}{A single copy of {\file run\_thread.sh} runs in the background on
              the present machine.}
+
 \pit{snits} {Many copies of {\file run\_thread.sh} on several nodes of a Linux
              cluster (snits is Hendrik's present cluster). Note that this
              cluster approach used background runs of the script through
              {\file ssh} started from an interactive node, and does not use a
              batch scheduling system. The system is also set up to run some
              processes on the front end of the cluster if so desired.}
+
 \pit{IBM\_ll}{Running on an IBM supercomputer with LoadLeveler as a batch
-              processor. {\file control.sh} or {\file control.cycle} is run
-              interactively, whereas the computational engine is submitted as
-              a batch job. The package is distributed with various sizes of
-              computational engines stored as {\file
-              thread\_start.sh.IBM\_ll.{\it NNN}}, where {\it NNN} indicates
-              the number of parallel processes in the engine. The file to be
-              used is linked to {\file thread\_start.sh.IBM\_ll} to be
-              activated. }
+             processor. {\file control.sh} or {\file control.cycle} is run
+             interactively, whereas the computational engine is submitted as a
+             batch job. The size of the engine is presently hardwired to 128,
+             and can be reset in the '{\code total\_tasks}' job card in
+             section 1.a of the script {\file thread\_start.sh.IBM\_ll}.}
+
+\pit{Moab}  {Running on a Linux cluster with the Moab job scheduler, the same
+             way as outlined for the IBM above.} 
+
 \end{plist}
 
 \noindent
@@ -1101,7 +1125,7 @@ computational engine designed for {\file control.sh}. Result of the steepest
 descent search are saved in the generational directory {\file gen{\it nnnn}}
 with {\it nnnn} corresponding to {\file igen} in the file {\file descent.{\it
 nnnn}}, where {\it nnnn} corresponds to {\file ipop}. This file contains a set
-of incrementally improved \gmd\ layouts, anding with the final optimal \gmd\
+of incrementally improved \gmd\ layouts, ending with the final optimal \gmd\
 for the chosen initial condition.
 \begin{center}
 {\file descent\_sort.sh igen ipop}
@@ -1109,7 +1133,6 @@ for the chosen initial condition.
 \noindent
 will sort the resulting best configuration from the file {\file descent.{\it
 igen}} and store the results in the file {\file descent\_sort.{\it igen}}.
-optimization,
 
 \vspace{\baselineskip}
 \noindent
@@ -1242,5 +1265,50 @@ before reading these data into Matlab scripts.
 \pagestyle{empty}
 \bpagea
 
+\pb \strut
+\pagestyle{empty}
+
+
+\vspace{2.5in} \centerline{\large \bf APPENDICES}
+\appendix
+
+\bpage
+\pb \newsec \setcounter{page}{1} \pagestyle{\pstyle}
+\renewcommand{\thepage}{\thesection.\arabic{page}}
+%--------------------------------------------------------------%
+% Appendix: ....                                               %
+%--------------------------------------------------------------%
+\section{Banana peels} \label{app:hints}
+
+\noindent
+This appendix presents some thoughts and considerations that may be helpful,
+as well as some traps I have fallen into when using this package. 
+
+\begin{itemize}
+
+\item When this package was first used in \citep{tol:MMAB10d}, some of the
+  computations were done on he 'snits' Linux cluster, some on the operational
+  IBM supercomputer of NCEP. To be able to move results easily, big-endian
+  files were used throughout, with the exception of the GrADS files, which by
+  definition used the local approach (big-endian on IBM, little-endian on
+  Linux), requiring the use of the {\file convert\_hr.sh} and {\file
+    convert\_LM.sh } scripts. Now that we are moving to a full Linux
+  environment at NCEP, most work s done here fully little-endian, without the
+  need for using the convert scripts. Be careful that the endian approach in
+  the {\file comp} and {\file link} scripts in \ws, and in the {\file
+    run\_make.sh} here are set up consistently. Otherwise, file read errors
+  will occur in the scripts.
+
+\item When running an error mapping experiment, filtering of computations
+  using the error of {\file test\_0X} and others should not be on. This should
+  be automatic, as filtering is done through the file {\file genes.terr.env}
+  in the generational directory, set by {\file control.sh}.
+
+\item When a new experiment is set up, it is critical to make sure that the
+  {\file genes.expdef.env} and {\file genes.mask.env} are consistent with
+  respect to the number of quadruplets defined. There is presently no elegant
+  error capturing if this is not the case. 
+
+\end{itemize}
 
 \end{document}

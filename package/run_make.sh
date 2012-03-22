@@ -5,9 +5,9 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 06-Nov-2008 : Origination.                                                   #
-#               Adding routines or programs not documented.                    #
+#               Adding compilers, routines or programs not documented.         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -24,8 +24,18 @@
 
   setup='.genes.env'
 
-  comp=pgf90
-  opt="-Mlist -fast -byteswapio"
+  comp=ifort
+  opt="-list -O3 -xSSE4.2 -ip"
+## opt="-list -O3 -xSSE4.2 -ip -convert big_endian"
+## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv"
+## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv -convert big_endian"
+
+# comp=pgf90
+# opt="-Mlist -fast"
+## opt="-Mlist -fast -byteswapio"
+## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist"
+## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist -byteswapio"
+
 
 # comp=xlf90
 # opt="-qsource -O3 -qnosave"

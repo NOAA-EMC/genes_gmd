@@ -1,0 +1,45 @@
+#!/bin/sh
+# ---------------------------------------------------------------------------- #
+# thread_wait.sh :  Wait for a version of the threaded engine to finish.       #
+#                   Version for Linucx with Moab scheduler.                    #
+#                                                                              #
+#                                      Author      : Hendrik L. Tolman         #
+#                                                                              #
+# 20-Mar-2012 : Origination.                                                   #
+#                                                                              #
+#    Copyright 2012 National Weather Service (NWS),                            #
+#       National Oceanic and Atmospheric Administration.  All rights           #
+#       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
+#       trademark of the NWS. No unauthorized use without permission.          #
+#                                                                              #
+# ---------------------------------------------------------------------------- #
+# 1. Initialization
+
+  nr_threads=`sed -n 1,1p threads.data | awk '{print $1}'`
+  job=`sed -n 2,2p threads.data | awk '{print $1}'`
+
+# 2. Waiting game
+
+  OK='n'
+  until [ "$OK" = 'y' ]
+  do
+    check="`qstat $job 2> /dev/null| grep $job | awk '{ print $5}'`"
+    if [ -z "$check" ]
+    then
+      OK='y'
+    else
+      if [ "$check" = 'C' ]
+      then
+        OK='y'
+      else
+#       echo "waiting for job $job ..."
+        sleep 5
+      fi
+    fi
+  done
+
+# 3. Moab cleanup
+
+  rm -f g_engine*
+
+# End of thread_wait.sh ------------------------------------------------------ #

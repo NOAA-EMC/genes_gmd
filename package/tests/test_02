@@ -13,8 +13,9 @@
 # 27-Oct-2008 : Origination.                                                   #
 # 03-Nov-2008 ; Adding partitioned output.                                     #
 # 24-Nov-2009 ; Starting with much larger time step.                           #
+# 16-Mar-2012 ; Adding MPIT parallel running on 'zeus'.                        #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -241,6 +242,7 @@ EOF
   echo "   Screen ouput routed to ww3_shel.1.out"
   $path_e/ww3_shel > ww3_shel.1.out
 # mpirun -np 17 $path_e/ww3_shel > ww3_shel.1.out
+# mpiexec_mpt -np 50 $path_e/ww3_shel > ww3_shel.1.out
 
   run_time=`grep 'Elapsed time' log.ww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
@@ -331,6 +333,7 @@ EOF
   echo "   Screen ouput routed to ww3_shel.2.out"
   $path_e/ww3_shel > ww3_shel.2.out
 # mpirun -np 17 $path_e/ww3_shel > ww3_shel.2.out
+# mpiexec_mpt -np 50 $path_e/ww3_shel > ww3_shel.2.out
 
   run_time=`grep 'Elapsed time' log.ww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"

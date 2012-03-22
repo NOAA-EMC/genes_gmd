@@ -10,8 +10,9 @@
 # 11-Dec-2008 : Add matlab *.m~ files.                                         #
 # 30-Dec-2008 : Disable section 7 (all_data files).
 # 29-Sep-2010 : Add clean up for GrADS maps             
+# 16-Mar-2012 : Add clean up for Intel
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -129,6 +130,7 @@
     rm -f *.lst
     rm -f *.mod
     rm -f *.o
+    rm -f xref.db
 
     if [ "$test" = 'yes' ]
     then

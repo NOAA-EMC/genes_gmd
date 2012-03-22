@@ -1,7 +1,7 @@
 #!/bin/sh
 # ---------------------------------------------------------------------------- #
 # thread_check.sh : Check a version of the threaded engine to compute errors.  #
-#                   IBM LoadLeveler version.                                   #
+#                   Linux version with Moab scheduler.                         #
 #                                                                              #
 # remarks : When modifying this script for another environment take care of    #
 #           the following requirements for the system to work.                 #
@@ -12,10 +12,9 @@
 #                                                                              #
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
-# 12-Feb-2010 : Origination.                                                   #
-# 18-Mar-2010 : Make ll check two deep, increase sleep time.                   #
+# 20-Mar-2021 : Origination.                                                   #
 #                                                                              #
-#    Copyright 2010-2012 National Weather Service (NWS),                       #
+#    Copyright 2012 National Weather Service (NWS),                            #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -30,10 +29,10 @@
   mother=$1
 
   ps > tmpfile
-  mname="`cat tmpfile | grep $mother | awk '{print $5}'`"
+  mname="`cat tmpfile | grep $mother | awk '{print $4}'`"
 
   me=$$
-  myname="`cat tmpfile | grep $me | awk '{print $5}'`"
+  myname="`cat tmpfile | grep $me | awk '{print $4}'`"
   rm -f tmpfile
 
   nth=`sed -n 1,1p threads.data | awk '{print $1}'`
@@ -59,7 +58,8 @@
 
 # 2.a check on mother script
 
-    check="`ps | grep $mother | awk '{print $4}'`"
+    date
+    check="`ps | grep $mother | awk '{print $2}'`"
     if [ -z "$check" ]
     then
       echo "   mother script stopped"
@@ -71,22 +71,24 @@
 # 2.b check on threads (job exists in ll)
 
     set +e
-    check="`llq 2> /dev/null | grep $tdata`"
+    check="`qstat $tdata | grep $tdata | awk '{ print $5}'`"
     set -e
-    if [ -z "$check" ]
+
+    OK='y'
+    if [ -z "$check" ] ; then
+      OK='n'
+    else
+      if [ "$check" = 'C' ] ; then
+        OK='n' ; fi
+    fi
+
+    if [ "$OK" != 'y' ]
     then
-      sleep 300
-      set +e
-      check="`llq 2> /dev/null | grep $tdata`"
-      set -e
-      if [ -z "$check" ]
-      then
-        echo "   ll job disappeared"
-        end='y'
-        kill -9 $mother
-      else
-        echo "   ll job present"
-      fi
+      echo "   batch job disappeared"
+      end='y'
+      kill -9 $mother
+    else
+      echo "   batch job present"
     fi
 
     if [ "$end" != 'y' ] ; then

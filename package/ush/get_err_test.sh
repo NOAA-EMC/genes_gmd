@@ -5,8 +5,9 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 26-Nov-2008 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -55,14 +56,6 @@
 
 # ---------------------------------------------------------------------------- #
 # 3. Compute error
-    
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f err_test.o
-# pgf90 err_test.f90 -byteswapio -o err_test.x -Mlist *.o
-# rm -f err_test.o
-# mv err_test.x $genes_main/exe/.
-# cd $back      
 
   set +e
   sed -n '/^\$.*/!p' $file1 $file2 | cut -c10- | \

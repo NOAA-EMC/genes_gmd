@@ -2,6 +2,8 @@
 # ---------------------------------------------------------------------------- #
 # thread_start.sh : Start a version of the threaded engine to compute errors.  #
 #                   Version for Linux clusters running Moab scheduler.         #
+#                   This version uses MPI API to work with commandfile.        #
+#                   (cmdfile_mpi.x needs to be compiled for MPI).              #
 #                                                                              #
 # remarks : When modifying this script for another environment take care of    #
 #           the following requirements for the system to work.                 #
@@ -14,7 +16,7 @@
 #                                                                              #
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
-# 19-Mar-2012 : Origination.                                                   #
+# 26-Mar-2012 : Origination.                                                   #
 #                                                                              #
 #    Copyright 2012 National Weather Service (NWS),                            #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -28,13 +30,16 @@
 cat > g_engine << EOF
 #!/bin/sh
 
-#PBS -l procs=96
+#PBS -l procs=60
 #PBS -q batch
-#PBS -l walltime=01:00:00
+#PBS -l walltime=08:00:00
 #PBS -A omd
 #PBS -N g_engine
 #PBS -j oe
 #PBS -o g_engine.out
+
+  echo 'Starting g_engine'
+  echo ' '
 
 EOF
 
@@ -52,16 +57,12 @@ EOF
   cmnd="$genes_main/ush/run_thread.sh"
 
   echo "  cd $ddir"                                              >> g_engine
-  echo ' '                                                       >> g_engine
-  echo "  ddir='$ddir'"                                          >> g_engine
-  echo "  cmnd='$cmnd'"                                          >> g_engine
-  echo ' '                                                       >> g_engine
-  echo '  sleep 2'                                               >> g_engine
+  echo "  rm -f cmdfile"                                         >> g_engine
   echo ' '                                                       >> g_engine
 
   i=1
   j=0
-  rm -f tdata.??
+  rm -f tdata.*
 
   while [ "$i" -le "$nr_threads" ]
   do
@@ -71,65 +72,23 @@ EOF
       i="0$i" ; fi
     outfile="thread_$i.out"
     echo "starting" > tdata.$i
-    echo '  host=`sed -n '" ${i},${i}p "' $PBS_NODEFILE`'        >> g_engine
-    echo "  i='$i'"                                              >> g_engine
-    echo "  outfile='$outfile'"                                  >> g_engine
-    echo '  ssh $host -n "cd $ddir ; $cmnd $i > $outfile" & 2> /dev/null' >> g_engine
-    echo ' '                                                     >> g_engine
-    j=`expr $j + 1`
-    if [ "$j" -gt '3' ]
-    then
-      j=0
-      echo "  sleep 1"                                           >> g_engine
-      echo ' '                                                   >> g_engine
-    fi 
+#   echo "echo 'cd $ddir ; $cmnd $i > $outfile' >> cmdfile"      >> g_engine
+    echo "echo '$cmnd $i > $outfile' >> cmdfile"      >> g_engine
     i=`expr $i + 1`
   done
 
   echo ' '                                                       >> g_engine
-
-# 2.b Have batch job wait till end of computations
-
-  echo "  sleep 5"                                               >> g_engine
-  echo "  go_on='yes'"                                           >> g_engine
-  echo "  nr_files=`ls tdata.* | wc -l | awk '{ print $1 }'`"    >> g_engine
-  echo "  nr_threads=$nr_threads"                                >> g_engine
-  echo '  echo "  $nr_files tdata files found"'                  >> g_engine
+  echo "  mpiexec_mpt $genes_main/exe/cmdfile_mpi.x"             >> g_engine
+  echo '  rm -f cmdfile'                                         >> g_engine
   echo ' '                                                       >> g_engine
   echo "  echo ' '"                                              >> g_engine
-  echo '  echo "Loop to wait for finishing of computations :"'   >> g_engine
-  echo '  echo "--------------------------------------------"'   >> g_engine
-  echo ' '                                                       >> g_engine
-  echo '  while [ "$go_on" = "yes" ]'                            >> g_engine
-  echo '  do'                                                    >> g_engine
-  echo '    if [ "$nr_files" -gt '0' ] '                         >> g_engine
-  echo '    then'                                                >> g_engine
-  echo '      nr_done=`head -1 tdata.* | grep 'done' | wc -l |'" awk '{ print "'$1'" }'"'`' >> g_engine
-  echo '      nr_strt=`head -1 tdata.* | grep 'star' | wc -l |'" awk '{ print "'$1'" }'"'`' >> g_engine
-  echo '      nr_wait=`head -1 tdata.* | grep 'read' | wc -l |'" awk '{ print "'$1'" }'"'`' >> g_engine
-  echo '    else'                                                >> g_engine
-  echo '      nr_strt="0"'                                       >> g_engine
-  echo '      nr_wait="0"'                                       >> g_engine
-  echo '      nr_done=$nr_threads'                               >> g_engine
-  echo '    fi'                                                  >> g_engine
-  echo '    nr_work=`expr $nr_threads - $nr_strt - $nr_wait - $nr_done`' >> g_engine
-  echo '    echo "    s/a/w/d : $nr_strt $nr_wait $nr_work $nr_done"'>> g_engine
-  echo '    if [ "$nr_done" = "$nr_threads" ]'                   >> g_engine
-  echo '    then'                                                >> g_engine
-  echo "      go_on='no'"                                        >> g_engine
-  echo '      sleep 5'                                           >> g_engine
-  echo '    else'                                                >> g_engine
-  echo '      sleep 10'                                          >> g_engine
-  echo '    fi'                                                  >> g_engine
-  echo '  done'                                                  >> g_engine
-  echo ' '                                                       >> g_engine
-  echo "  echo ' '"                                              >> g_engine
-  echo "  echo 'End of loop and script'"                         >> g_engine
+  echo "  echo 'End of g_engine'"                                >> g_engine
 
 # ---------------------------------------------------------------------------- #
 # 3. Start threads and add data to datafile
 
   touch g_engine.out
+
   qsub g_engine > g_engine.Moab 2>&1
 
   ID=`grep 'zeus' g_engine.Moab | sed 's/\./ /g'| awk '{ print $1}'`

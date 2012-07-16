@@ -10,8 +10,9 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 13-Nov-2008 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -130,14 +131,6 @@
   echo '   Process data files ....'
 
   rm -f all_data.ww3* errors.ww3
-
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f process.o
-# pgf90 process.f90 -byteswapio -o process.x -Mlist *.o
-# rm -f process.o
-# mv process.x $genes_main/exe/.
-# cd $back
 
   $genes_main/exe/process.x > process.out
 

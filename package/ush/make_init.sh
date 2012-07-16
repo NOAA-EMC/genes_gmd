@@ -5,8 +5,9 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 20-Dec-2008 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -52,19 +53,6 @@
   echo "  $genes_nq $genes_npop0 $genes_seed"            > input
   sed -n '/^\$.*/!p'  ../genes.mask.env                 >> input
   sed -n '/^\$.*/!p'  ../genes.stats.env                >> input
-
-# echo '---------------------------------------------------------------'
-# cat input
-# echo '---------------------------------------------------------------'
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f qtoolsmd.o
-# pgf90 -c qtoolsmd.f90 -Mlist qstoolmd.o
-# rm -f initgen.o
-# pgf90 initgen.f90 -byteswapio -o initgen.x -Mlist *.o
-# rm -f initgen.o
-# mv initgen.x $genes_main/exe/.
-# cd $back
 
   $genes_main/exe/initgen.x
 

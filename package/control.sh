@@ -14,8 +14,11 @@
 # 02-Nov-2009 : Adding clean stop of engine.                                   #
 # 16-Feb-2010 : Adapt for up to 999 threads.                                   #
 # 03-Mar-2010 : Additional cleanup for IBM added.                              #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
+# 06-Apr-2012 : Nested loop tdata file testing added.                          #
+# 08-Apr-2012 : Suppres error message killing sleep.                           #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -235,14 +238,6 @@
 
   echo "   Check status of population ..."
 
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f chckgen.o
-# pgf90 chckgen.f90 -byteswapio -o chckgen.x -Mlist *.o
-# rm -f chckgen.o
-# mv chckgen.x $genes_main/exe/.
-# cd $back
-
   rm -f snl.????
   rm -f snl.????.out
 
@@ -361,10 +356,17 @@
     set -e
     if [ "$nr_threads" = "$nr_test" ]
     then
-      echo "         Engine with $nr_threads threads"
-    else
-      echo "      Threads inconsistency [$nr_threads $nr_test]"
-      echo "      *** abort ***" ; exit 11
+      sleep 5
+      set +e
+      nr_test=`ls tdata.??? 2> /dev/null | wc -w | awk '{print $1}'`
+      set -e
+      if [ "$nr_threads" = "$nr_test" ]
+      then
+        echo "         Engine with $nr_threads threads"
+      else
+        echo "      Threads inconsistency [$nr_threads $nr_test]"
+        echo "      *** abort ***" ; exit 11
+      fi
     fi
 
 # 6.d Feed the engine
@@ -442,9 +444,9 @@
     $genes_main/ush/thread_wait.sh
     echo "      Engine done"
     echo "      Stopping engine check ..."
-    killall sleep
-    sleep 1
     set +e
+    killall sleep 2> /dev/null
+    sleep 1
     killall thread_check.sh 2> /dev/null
     set -e
     echo ' '
@@ -496,14 +498,6 @@
 
     echo ' '
     echo "   Finalize the present population ..."
-
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f sortgen.o
-# pgf90 sortgen.f90 -byteswapio -o sortgen.x -Mlist *.o
-# rm -f sortgen.o
-# mv sortgen.x $genes_main/exe/.
-# cd $back
 
     npop=`wc -l population | awk '{print $1}'`
     npop=`expr $npop / $genes_nq`

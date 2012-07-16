@@ -7,8 +7,9 @@
 # Remarks: Using get_err_test.sh.                                              #
 #                                                                              #
 # 26-Nov-2008 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -58,14 +59,6 @@
 
 # ---------------------------------------------------------------------------- #
 # 4. Compute error
-    
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f err_tot.o
-# pgf90 err_tot.f90 -byteswapio -o err_tot.x -Mlist *.o
-# rm -f err_tot.o
-# mv err_tot.x $genes_main/exe/.
-# cd $back      
 
   set +e
   cat error.sum | $genes_main/exe/err_tot.x  > err_tot.out

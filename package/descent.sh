@@ -16,8 +16,9 @@
 #               work on IBM.                                                   #
 # 10-Sep-2010 : Swicth sorting off again to avoid issues with non-homogeneous  #
 #               optimization masks.                                            #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -184,14 +185,6 @@
   fi
 
 # 3.h Get first member data
-
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f getmember.o
-# pgf90 getmember.f90 -byteswapio -o getmember.x -Mlist *.o
-# rm -f getmember.o
-# mv getmember.x $genes_main/exe/.
-# cd $back
 
   if [ "$pop_is_nr" = 'yes' ] 
   then
@@ -394,14 +387,6 @@ do
 
       echo "      Computing partial derivatives ..."
 
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f descent1.o
-# pgf90 descent1.f90 -byteswapio -o descent1.x -Mlist *.o
-# rm -f descent1.o
-# mv descent1.x $genes_main/exe/.
-# cd $back
-
       if [ -f mini_pop ]
       then
         echo "         mini_pop already exists"
@@ -530,14 +515,6 @@ do
 
       echo "      Computing search line  ..."
 
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f descent2.o
-# pgf90 descent2.f90 -byteswapio -o descent2.x -Mlist *.o
-# rm -f descent2.o
-# mv descent2.x $genes_main/exe/.
-# cd $back
-
       echo "$genes_nq $inc "                                        > input
       sed -n '/^\$.*/!p'  ../genes.mask.env                        >> input
 
@@ -614,14 +591,6 @@ do
 # 6.f Get final best guess
 
       echo "      Select best member  ..."
-
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f descent3.o
-# pgf90 descent3.f90 -byteswapio -o descent3.x -Mlist *.o
-# rm -f descent3.o
-# mv descent3.x $genes_main/exe/.
-# cd $back
 
       echo "$genes_nq" | $genes_main/exe/descent3.x > descent3.out
 

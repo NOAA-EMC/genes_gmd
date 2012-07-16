@@ -6,6 +6,7 @@
 #                                                                              #
 # 06-Nov-2008 : Origination.                                                   #
 #               Adding compilers, routines or programs not documented.         #
+# 26-Mar-2012 : Add MPI program option.                                        #
 #                                                                              #
 #    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -23,27 +24,31 @@
   echo '   Compile programs for GMD optimization.'
 
   setup='.genes.env'
+  mpi='yes'
 
   comp=ifort
+  cmpi="ifort -lmpi"
   opt="-list -O3 -xSSE4.2 -ip"
 ## opt="-list -O3 -xSSE4.2 -ip -convert big_endian"
 ## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv"
 ## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv -convert big_endian"
 
 # comp=pgf90
+# cmpi=mpf90
 # opt="-Mlist -fast"
 ## opt="-Mlist -fast -byteswapio"
 ## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist"
 ## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist -byteswapio"
 
-
 # comp=xlf90
+# cmpi=mpxlf90
 # opt="-qsource -O3 -qnosave"
 
   subs='constants w3timemd w3dispmd w3arrymd random qtoolsmd cgaussmd'
   progs='process restart_co err_test err_tot err_par getmember'
   progs="$progs reseed initgen chckgen sortgen nextgen mapsgen"
   progs="$progs descent1 descent2 descent3 testerr"
+  mpis='cmdfile_mpi'
   ext='.f90'
 
 # ---------------------------------------------------------------------------- #
@@ -90,7 +95,25 @@
   done
 
 # ---------------------------------------------------------------------------- #
-# 5. End of script
+# 5. Compile MPI programs
+
+  if [ "$mpi" = 'yes' ]
+  then
+    echo ' '
+    echo '   Compiling MPI programs :'
+    echo '   ------------------------'
+
+    for prog in $mpis
+    do
+      echo "      processing $prog$ext ..."
+      $cmpi $opt $prog$ext -o $prog.x *.o
+      rm -f $prog.o
+      mv $prog.x $genes_main/exe/.
+    done
+  fi
+
+# ---------------------------------------------------------------------------- #
+# 6. End of script
 
   echo ' '
   echo 'End of run_make.sh' 

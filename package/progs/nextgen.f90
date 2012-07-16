@@ -5,7 +5,7 @@
 !/                  | WAVEWATCH III           NOAA/NCEP |
 !/                  |           H. L. Tolman            |
 !/                  |                        FORTRAN 90 |
-!/                  | Last update :         23-Mar-2010 |
+!/                  | Last update :         23-Mar-2012 |
 !/                  +-----------------------------------+
 !/
 !/    02-Jan-2009 : Origination.
@@ -20,8 +20,9 @@
 !/    24-Dec-2009 : Rescale for deep and shallow scaling separately.
 !/    04-Feb-2010 : Fix FORMAT warning.   
 !/    23-Mar-2010 : Add old.NNNN file generation.
+!/    23-Mar-2012 : ALlow for 0 members to be reatined (was at least 1).
 !/
-!/    Copyright 2009-2010 National Weather Service (NWS),
+!/    Copyright 2009-2012 National Weather Service (NWS),
 !/       National Oceanic and Atmospheric Administration.  All rights
 !/       reserved.  iDistributed as part of WAVEWATCH III. WAVEWATCH III
 !/       is a trademark of the NWS.
@@ -87,7 +88,7 @@
                                  LGEN, NPAR, I, J, NACT, IQ, IC, NC,  &
                                  NPL, NPH, NPA, IP1, IP2, NCR, IC1,   &
                                  IC2, NMUT(0:2), MTYPE, JS, JQD, JQS, &
-                                 NDSE
+                                 NDSE, NCMIN
       INTEGER, ALLOCATABLE    :: IADDR(:)
       REAL                    :: FACC, FACP1, FACP2, FACP3, RAND,     &
                                  CROSS0, CROSS1, CROSS2, CROSSM,      &
@@ -141,6 +142,11 @@
                                         CROSS0, CROSS1, CROSS2,       &
                                         CROSSM, EMUT, MUT1, MRSTD
       FACC   = MAX ( 0. , MIN ( 1. , FACC ) )
+      IF ( FACC .EQ. 0. ) THEN
+          NCMIN  = 0
+        ELSE
+          NCMIN  = 1
+        END IF
       FACP1  = MIN ( 1. , MAX ( FACC , FACP1 ) )
       FACP2  = MIN ( MAX ( FACP1 , FACP2 ) , 1. )
       FACP3  = MAX ( 1.5 , FACP3 )
@@ -267,31 +273,39 @@
       NEW    = -1.
       SNEW   = -1.
 !
-      NC     = MIN ( NPOP-1 , MAX ( NINT(REAL(NPOP)*FACC) , 1 ) )
+      NC     = MIN ( NPOP-1 , MAX ( NINT(REAL(NPOP)*FACC) , NCMIN ) )
       WRITE (*,931) NC
 !
-      IC     = 1
-      NEW (:,IC) = OLD (:,IC)
-      SNEW(:,IC) = SOLD(:,IC)
-      WRITE (EFILE,'(A4,I4.4)') 'old.', IC
-      OPEN (NDSE,FILE=EFILE)
-      WRITE (NDSE,'(I4.4)') IC
-      CLOSE (NDSE)
+      IF ( NC .EQ. 0 ) THEN
 !
-      DO I=2, NPOP
-        IF ( QDIFF(NQ,LGEN,SNEW(:,IC),SOLD(:,I)) ) THEN
-            IC     = IC + 1
-            NEW (:,IC) = OLD (:,I)
-            SNEW(:,IC) = SOLD(:,I)
-            WRITE (EFILE,'(A4,I4.4)') 'old.', IC
-            OPEN (NDSE,FILE=EFILE)
-            WRITE (NDSE,'(I4.4)') I
-            CLOSE (NDSE)
-          ELSE
-            WRITE (*,932) I
-          END IF
-        IF ( IC .GE. NC ) EXIT
-        END DO
+          IC     = 0
+!
+        ELSE
+!
+          IC     = 1
+          NEW (:,IC) = OLD (:,IC)
+          SNEW(:,IC) = SOLD(:,IC)
+          WRITE (EFILE,'(A4,I4.4)') 'old.', IC
+          OPEN (NDSE,FILE=EFILE)
+          WRITE (NDSE,'(I4.4)') IC
+          CLOSE (NDSE)
+!
+          DO I=2, NPOP
+            IF ( QDIFF(NQ,LGEN,SNEW(:,IC),SOLD(:,I)) ) THEN
+                IC     = IC + 1
+                NEW (:,IC) = OLD (:,I)
+                SNEW(:,IC) = SOLD(:,I)
+                WRITE (EFILE,'(A4,I4.4)') 'old.', IC
+                OPEN (NDSE,FILE=EFILE)
+                WRITE (NDSE,'(I4.4)') I
+                CLOSE (NDSE)
+              ELSE
+                WRITE (*,932) I
+              END IF
+            IF ( IC .GE. NC ) EXIT
+            END DO
+!
+        END IF
 !
 !--- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 ! 4.  Set up new population, offspring

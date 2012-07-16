@@ -5,7 +5,7 @@
 !/                  | WAVEWATCH III           NOAA/NCEP |
 !/                  |           H. L. Tolman            |
 !/                  |                        FORTRAN 90 |
-!/                  | Last update :         10-Sep-2010 |
+!/                  | Last update :         25-Apr-2012 |
 !/                  +-----------------------------------+
 !/
 !/    30-Dec-2008 : Origination.
@@ -15,8 +15,9 @@
 !/    24-Dec-2009 : Renormalize for switched-off scalings.
 !/    13-Aug-2010 : Move from !/NLX to !/NL3.
 !/    10-Sep-2010 : Expand format for m < -9.99.
+!/    25-Apr-2012 : Reduce search line to 12 points.
 !/
-!/    Copyright 2008-2010 National Weather Service (NWS),
+!/    Copyright 2008-2012 National Weather Service (NWS),
 !/       National Oceanic and Atmospheric Administration.  All rights
 !/       reserved.  iDistributed as part of WAVEWATCH III. WAVEWATCH III
 !/       is a trademark of the NWS.
@@ -239,9 +240,10 @@
                 END DO
             END IF
 !
-          PFAC   = 0.25
-!         DO J=1, 16
-          DO J=1, 12
+!         PFAC   = 0.25
+          PFAC   = 0.10
+!         DO J=1, 12
+          DO J=1, 40
             DO JJ=1, LGEN
               PERT(JJ) = MEMBER(JJ) + ADELT(JJ)*PFAC*REAL(J)
               END DO

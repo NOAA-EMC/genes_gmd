@@ -11,6 +11,7 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 19-Mar-2012 : Origination.                                                   #
+# 24-Mar-2012 : Error capturing for mjobctl added.                             #
 #                                                                              #
 #    Copyright 2012 National Weather Service (NWS),                            #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -28,13 +29,17 @@
   if [ -f threads.data ]
   then
     tdata=`sed -n '2,2p' threads.data | awk '{print $1}'`
-    mjobctl -c $tdata > g_engine.cancel
-    sleep 5
+    if [ -n $tdata ]
+    then
+      set +e
+      mjobctl -c $tdata > g_engine.cancel 2> /dev/null
+      set -e
+      sleep 5
+    fi
   fi
 
 # 2. Cleaning up files
 
-  rm -f tdata.???
   rm -f threads.data
   rm -f thread_???.out
   rm -rf thread_???
@@ -57,5 +62,7 @@
       fi
     done
   fi
+
+  rm -f tdata.???
 
 # End of thread_stop.sh ------------------------------------------------------ #

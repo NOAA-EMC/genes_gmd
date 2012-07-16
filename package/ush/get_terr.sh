@@ -7,8 +7,9 @@
 # Remarks: Error testing switched off by setting min_err to 999.999            #
 #                                                                              #
 # 31-Aug-2009 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2009-2010 National Weather Service (NWS),                       #
+#    Copyright 2009-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -48,14 +49,6 @@
 # 4. Get test error
 
   min_err_pop=`head -1 population | awk '{ print $1 }'`
-
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f testerr.o
-# pgf90 testerr.f90 -byteswapio -o testerr.x -Mlist
-# rm -f testerr.o
-# mv testerr.x $genes_main/exe/.
-# cd $back
 
   echo "$min_err_pop $min_err $max_err $err_fac" |  \
       $genes_main/exe/testerr.x > testerr.out

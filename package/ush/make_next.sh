@@ -7,8 +7,9 @@
 # 02-Jan-2009 : Origination.                                                   #
 # 21-Jan-2009 : Upgrade child generation.                                      #
 # 01-Nov-2009 : Generate error files for completed members.                    #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2009-2010 National Weather Service (NWS),                       #
+#    Copyright 2009-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -80,15 +81,6 @@
   echo '---------------------------------------------------------------'
   cat input
   echo '---------------------------------------------------------------'
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f qtoolsmd.o qtoolsmd.mod
-# pgf90 -c qtoolsmd.f90 -byteswapio
-# rm -f nextgen.o
-# pgf90 nextgen.f90 -byteswapio -o nextgen.x -Mlist *.o
-# rm -f nextgen.o
-# mv nextgen.x $genes_main/exe/.
-# cd $back
 
   $genes_main/exe/nextgen.x
 

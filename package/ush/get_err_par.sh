@@ -7,8 +7,9 @@
 # Remarks: Error files axpected to be there.                                   #
 #                                                                              #
 # 24-Dec-2008 : Origination.                                                   #
+# 23-Mar-2012 : Removed obsolete (PGI based) comments.                         #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -75,14 +76,6 @@
 
 # ---------------------------------------------------------------------------- #
 # 4. Compute error
-    
-# back=`pwd`
-# cd $genes_main/progs
-# rm -f err_par.o
-# pgf90 err_par.f90 -byteswapio -o err_par.x -Mlist *.o
-# rm -f err_par.o
-# mv err_par.x $genes_main/exe/.
-# cd $back      
 
   set +e
   cat input | $genes_main/exe/err_par.x  > err_par.out

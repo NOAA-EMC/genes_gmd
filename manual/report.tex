@@ -134,7 +134,8 @@ Marine Modeling and Analysis Branch
 
 %Version 1.0, December 2010 \\
 %Version 1.1, March 2012 \\
-Version 1.2 \today\ (DRAFT, Revision: \SVNRevision)
+Version 1.2, July 2012 \\
+%Version 1.3 \today\ (DRAFT, Revision: \SVNRevision)
 
 \vfill {\sc this is an unreviewed manuscript, primarily
 intended for informal exchange of information among ncep staff
@@ -180,8 +181,10 @@ ver. &   WW   & rev. $^*$   & date    & comment    \\ \hline \hline
      &        &        &                   & used for \cite{tol:MMAB10d}.   \\ \hline
  1.1 & 3.15.2 &  18380 &  March 22, 2012   & Bug fixes up to 3.14.13        \\
      &        &        &                   & Transition to 'zeus' and Intel.\\ \hline
-  1.2 &  4.xx  & \SVNRevision & \today      & Transition of GMD to           \\
-      &        &        &                   & development trunk .            \\ \hline 
+ 1.2 &  4.08  &  20334 &  July 18, 2012    & Transition of GMD to           \\
+     &        &        &                   & development trunk .            \\ \hline 
+% 1.3 &  4.xx  & \SVNRevision & \today      & Work version.                  \\
+ \hline 
 \end{tabular}
 \end{center}
 
@@ -600,6 +603,15 @@ source term ($s_{nl}$) and partitioned wave data, respectively.  The first
 command line argument of this script identifies the subdirectory for the
 baseline datasets. The second command line parameter is optional, and
 identifies if GrADS data sets are to be saved with the general baseline data.
+Note that efficient computation of the one-and two-dimensional test grids
+({\file test\_02}, {\file test\_05}, {\file test\_12}, {\file test\_13},
+{\file test\_hr} and {\file test\_LM}) using the full nonlinear interaction
+may be time consuming, and require a parallel (MPI) computational environment.
+Note that the above scripts are set up to run tests in parallel, but that this
+will require some manual intervention (as documented in the scripts). Note,
+furthermore, that this generally requires the tests to be run in some kind of
+batch mode. As such batch scripts are highly dependent on the parallel compute
+environment, such a script is not provided with the package.
 
 The above commands only generate raw test data, with the exception of the
 optional GrADS data that can be used to get a quick look at full
@@ -792,6 +804,81 @@ different initial optimization seeds etc. Files identified with `(c)' are kept
 in the directory for documentation only, the actual files used by the package
 are stored in the main directory {\code \$genes\_main}.
 
+
+\begin{myfig}{tbp}
+\setlength{\unitlength}{0.1mm}
+
+\begin{center} \begin{picture}(1200,935)(0,-935)
+
+% outer box
+
+\put(  20,  -60){\makebox(0,80)[l]{\file control.sh}}
+\put(   0, -935){\framebox(1200,885)[c]{}}
+
+% initializations
+
+\put(  20, -130){\makebox(0,80)[l]{Process setup file {\file .genes.env}}}
+\put(  20, -180){\makebox(0,80)[l]{Test or generate {\code \$genes\_exp1/\$genes\_epx2}}}
+\put(  20, -230){\makebox(0,80)[l]{Process or generate {\file genes.expdef.env}}}
+\put(  20, -280){\makebox(0,80)[l]{Copy or test other setup files}}
+\put(   0, -275){\line(1,0){1200}}
+
+% initial population
+
+\put(  20, -350){\makebox(0,80)[l]{If necessary, make first generation}}
+\put(1180, -350){\makebox(0,80)[r]{({\file make\_init.sh})}}
+\put(   0, -345){\line(1,0){1200}}
+
+% check population
+
+\put(  20, -420){\makebox(0,80)[l]{Check generation, for all members do}}
+\put(1180, -420){\makebox(0,80)[r]{({\file chckgen.x})}}
+\put(  70, -490){\makebox(0,80)[l]{If error not processed, make file {\file
+                                   snl.{\it nnnn}}}}
+\put(  70, -540){\makebox(0,80)[l]{with \gmd\ setup for wave model.}}
+\put(  50, -415){\line(1,0){1150}}
+\put(  50, -415){\line(0,-1){120}}
+\put(   0, -535){\line(1,0){1200}}
+
+% Process errors
+
+\put(  20, -610){\makebox(0,80)[l]{For all files {\file snl.{\it nnnn}} do}}
+\put(  70, -680){\makebox(0,80)[l]{Compute error file {\file err.{\it nnnn}}}}
+\put(1180, -680){\makebox(0,80)[r]{`computational engine'}}
+\put(  50, -605){\line(1,0){1150}}
+\put(  50, -605){\line(0,-1){70}}
+\put(   0, -675){\line(1,0){1200}}
+
+% recheck population
+
+\put(  20, -750){\makebox(0,80)[l]{Check generation, if all errors present do:}}
+\put(1180, -750){\makebox(0,80)[r]{({\file chckgen.x})}}
+\put(  50, -745){\line(1,0){1150}}
+\put(  50, -745){\line(0,-1){70}}
+
+% sort population
+
+\put(  70, -820){\makebox(0,80)[l]{Sort the population by total error and produce}}
+\put(  70, -870){\makebox(0,80)[l]{other population and error files.}}
+\put(1180, -870){\makebox(0,80)[r]{({\file sortgen.x})}}
+\put(  50, -745){\line(1,0){1150}}
+\put(  50, -865){\line(1,0){1150}}
+\put(  50, -745){\line(0,-1){190}}
+
+% start the next generation
+
+\put(  70, -940){\makebox(0,80)[l]{Start the next generation}}
+\put(1180, -940){\makebox(0,80)[r]{({\file make\_next.sh})}}
+\put(   0, -935){\line(1,0){1200}}
+
+\end{picture} \end{center}
+
+\myfcap{Structure of the main genetic optimization routine {\file
+        control.sh}. The `computational engine' is described in the
+        manuscript.} \label{fig:control}
+\end{myfig}
+
+
 The main script controlling the optimization is the script {\file control.sh}.
 This script is designed to incrementally execute the model optimization,
 including the initial setup for the optimization process. The layout of the
@@ -872,80 +959,6 @@ set {\file population}. Note that in its first call in the script, {\file
 chckgen.x} processes all error files {\file err.{\it nnnn}} from previously
 aborted runs of {\file control.sh}, hence avoiding duplication of work already
 performed.
-
-
-\begin{myfig}{tbp}
-\setlength{\unitlength}{0.1mm}
-
-\begin{center} \begin{picture}(1200,935)(0,-935)
-
-% outer box
-
-\put(  20,  -60){\makebox(0,80)[l]{\file control.sh}}
-\put(   0, -935){\framebox(1200,885)[c]{}}
-
-% initializations
-
-\put(  20, -130){\makebox(0,80)[l]{Process setup file {\file .genes.env}}}
-\put(  20, -180){\makebox(0,80)[l]{Test or generate {\code \$genes\_exp1/\$genes\_epx2}}}
-\put(  20, -230){\makebox(0,80)[l]{Process or generate {\file genes.expdef.env}}}
-\put(  20, -280){\makebox(0,80)[l]{Copy or test other setup files}}
-\put(   0, -275){\line(1,0){1200}}
-
-% initial population
-
-\put(  20, -350){\makebox(0,80)[l]{If necessary, make first generation}}
-\put(1180, -350){\makebox(0,80)[r]{({\file make\_init.sh})}}
-\put(   0, -345){\line(1,0){1200}}
-
-% check population
-
-\put(  20, -420){\makebox(0,80)[l]{Check generation, for all members do}}
-\put(1180, -420){\makebox(0,80)[r]{({\file chckgen.x})}}
-\put(  70, -490){\makebox(0,80)[l]{If error not processed, make file {\file
-                                   snl.{\it nnnn}}}}
-\put(  70, -540){\makebox(0,80)[l]{with \gmd\ setup for wave model.}}
-\put(  50, -415){\line(1,0){1150}}
-\put(  50, -415){\line(0,-1){120}}
-\put(   0, -535){\line(1,0){1200}}
-
-% Process errors
-
-\put(  20, -610){\makebox(0,80)[l]{For all files {\file snl.{\it nnnn}} do}}
-\put(  70, -680){\makebox(0,80)[l]{Compute error file {\file err.{\it nnnn}}}}
-\put(1180, -680){\makebox(0,80)[r]{`computational engine'}}
-\put(  50, -605){\line(1,0){1150}}
-\put(  50, -605){\line(0,-1){70}}
-\put(   0, -675){\line(1,0){1200}}
-
-% recheck population
-
-\put(  20, -750){\makebox(0,80)[l]{Check generation, if all errors present do:}}
-\put(1180, -750){\makebox(0,80)[r]{({\file chckgen.x})}}
-\put(  50, -745){\line(1,0){1150}}
-\put(  50, -745){\line(0,-1){70}}
-
-% sort population
-
-\put(  70, -820){\makebox(0,80)[l]{Sort the population by total error and produce}}
-\put(  70, -870){\makebox(0,80)[l]{other population and error files.}}
-\put(1180, -870){\makebox(0,80)[r]{({\file sortgen.x})}}
-\put(  50, -745){\line(1,0){1150}}
-\put(  50, -865){\line(1,0){1150}}
-\put(  50, -745){\line(0,-1){190}}
-
-% start the next generation
-
-\put(  70, -940){\makebox(0,80)[l]{Start the next generation}}
-\put(1180, -940){\makebox(0,80)[r]{({\file make\_next.sh})}}
-\put(   0, -935){\line(1,0){1200}}
-
-\end{picture} \end{center}
-
-\myfcap{Structure of the main genetic optimization routine {\file
-        control.sh}. The `computational engine' is described in the
-        manuscript.} \label{fig:control}
-\end{myfig}
 
 If all errors have been computed, the program {\file sortgen.x} sorts the
 population by ascending error into the file {\file population}, and
@@ -1271,6 +1284,8 @@ before reading these data into Matlab scripts.
 
 \vspace{2.5in} \centerline{\large \bf APPENDICES}
 \appendix
+\addtocontents{toc}{\vspace{\baselineskip}}
+\addcontentsline{toc}{subsection}{Appendices}
 
 \bpage
 \pb \newsec \setcounter{page}{1} \pagestyle{\pstyle}
@@ -1309,6 +1324,18 @@ as well as some traps I have fallen into when using this package.
   respect to the number of quadruplets defined. There is presently no elegant
   error capturing if this is not the case. 
 
+\item {\file genes.source.env} can be used with the proper compilation of \ws\
+  to run a baseline case with selected GMD settings, and can then be used to
+  compute errors etc. If however, GMD options are left on in this file, and
+  {\file control.sh} is run, these source term setting will override the one
+  that the optimization is trying to set, and all population members will
+  artificially get the same error (this will crash the generation of the next
+  generation). So make sure {\file genes.source.env} is reset to all comment
+  lines before trying to optimize again.
 \end{itemize}
+
+\pb
+\pagestyle{empty}
+\bpagea
 
 \end{document}

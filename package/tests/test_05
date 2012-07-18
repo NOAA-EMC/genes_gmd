@@ -15,6 +15,7 @@
 # 03-Nov-2008 ; Adding partitioned output.                                     #
 # 24-Nov-2009 ; Starting with much larger time step.                           #
 # 16-Mar-2012 ; Adding MPIT parallel running on 'zeus'.                        #
+# 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
 #                                                                              #
 #    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -114,7 +115,8 @@ if [ -f "$snl" ] ; then
   cat $snl ; fi         >> ww3_grid.inp
 cat >> ww3_grid.inp << EOF 
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
    77   3 
    10.e3  500.e3  1.
     0.e3 -500.e3  1. 
@@ -156,7 +158,8 @@ if [ -f "$snl" ] ; then
   cat $snl ; fi         >> ww3_grid.inp
 cat >> ww3_grid.inp << EOF 
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
    77   3 
    10.e3  500.e3  1.
     0.e3 -500.e3  1. 
@@ -249,7 +252,7 @@ EOF
   echo "      Run time : $run_time s"
 
   mv log.ww3 log.1
-  mv restart1.ww3 restart.ww3
+  mv restart001.ww3 restart.ww3
   mv mod_def.2 mod_def.ww3
   rm -f ww3_shel.inp test*.ww3
 
@@ -565,9 +568,9 @@ $
  50
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

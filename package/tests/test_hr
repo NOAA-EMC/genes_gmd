@@ -16,6 +16,12 @@
 #                                                                              #
 # 28-Sep-2010 : Origination.                                                   #
 # 12-Aug-2011 : Document additions for WRT adaptations.                        #
+# 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
+#                                                                              #
+#    Copyright 2010-2012 National Weather Service (NWS),                       #
+#       National Oceanic and Atmospheric Administration.  All rights           #
+#       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
+#       trademark of the NWS. No unauthorized use without permission.          #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 # 0.  Preparations :
@@ -126,10 +132,10 @@ EOF
 
   for grid in grd1 grd2 grd3
   do
-    if [ -f restart1.$grid ]
+    if [ -f restart001.$grid ]
     then
-      echo "   Found file restart1.$grid"
-      mv restart1.$grid restart.$grid
+      echo "   Found file restart001.$grid"
+      mv restart001.$grid restart.$grid
     else
       ln -sf mod_def.$grid mod_def.ww3
       echo "   Screen ouput routed to ww3_strt.$grid.out"
@@ -188,16 +194,17 @@ $
   'grd2'  'no' 'no' 'input' 'no' 'no' 'no' 'no'   2  1  0.00 1.00  F
   'grd3'  'no' 'no' 'input' 'no' 'no' 'no' 'no'   3  1  0.00 1.00  F
 $
-$  19680606 000000   19680607 000000
+   19680606 000000   19680607 000000
 $  19680606 000000   19680606 040000
 $  19680606 040000   19680606 100000
 $  19680606 100000   19680606 170000
-   19680606 170000   19680607 000000
+$  19680606 170000   19680607 000000
 $
     T T
 $
    19680606 000000   3600  19680607 000000
-  F F T F F  T F F F F  T T F F T  T F T F F  F T F F F  F F F F F  F
+  F F T F F  F T F F F  F F T F F  T T T F T  F F F T F  F F F F F
+  F F F F F  F F F F F  F F F F F  F F F F F  F F F
    19680606 000000   3600  19680608 000000
 EOF
   sed -n '/^\$/!p' $genes_main/tests/test_hr.data/buoy.input  >> ww3_multi.inp 
@@ -225,9 +232,9 @@ $ End of input file
 EOF
 
   echo "   Screen ouput routed to ww3_multi.out"
-# $path_e/ww3_multi > ww3_multi.out
+  $path_e/ww3_multi # > ww3_multi.out
 # mpirun -np 16 $path_e/ww3_multi # > ww3_multi.out
-  poe $path_e/ww3_multi # > ww3_multi.out
+# poe $path_e/ww3_multi # > ww3_multi.out
 
   run_time=`grep 'Elapsed time' log.mww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
@@ -245,13 +252,14 @@ EOF
 cat > gx_outf.inp << EOF
 $ WAVEWATCH III Grid output post-processing
 $ -----------------------------------------
-$ 19680606 000000  3600.  25
+  19680606 000000  3600.  25
 $ 19680606 000000  3600.   4
 $ 19680606 040000  3600.   6
 $ 19680606 100000  3600.   7
-  19680606 170000  3600.   8
+$ 19680606 170000  3600.   8
 $
-  F F T F F  T F F F F  T T F F T  T F T F F  F T F F F  F F F F F  F
+  F F T F F  F T F F F  F F T F F  T T T F T  F F F T F  F F F F F
+  F F F F F  F F F F F  F F F F F  F F F F F  F F F
 $
   0 999 0 999  T F
 $
@@ -459,9 +467,9 @@ $
  33
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

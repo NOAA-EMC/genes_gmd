@@ -32,7 +32,7 @@ cat > g_engine << EOF
 
 #PBS -l procs=60
 #PBS -q batch
-#PBS -l walltime=08:00:00
+#PBS -l walltime=02:00:00
 #PBS -A omd
 #PBS -N g_engine
 #PBS -j oe

@@ -16,6 +16,12 @@
 #                                                                              #
 # 20-Oct-2010 : Origination.                                                   #
 # 12-Aug-2011 : Document additions for WRT adaptations.                        #
+# 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
+#                                                                              #
+#    Copyright 2010-2012 National Weather Service (NWS),                       #
+#       National Oceanic and Atmospheric Administration.  All rights           #
+#       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
+#       trademark of the NWS. No unauthorized use without permission.          #
 #                                                                              #
 # ---------------------------------------------------------------------------- #
 # 0.  Preparations :
@@ -131,10 +137,10 @@ EOF
 
   for grid in grl_mich
   do
-    if [ -f restart1.$grid ]
+    if [ -f restart001.$grid ]
     then
-      echo "   File restart1.$grid found"
-      mv restart1.$grid restart.$grid
+      echo "   File restart001.$grid found"
+      mv restart001.$grid restart.$grid
     else
       ln -sf mod_def.$grid mod_def.ww3
       echo "   Screen ouput routed to ww3_strt.$grid.out"
@@ -201,9 +207,9 @@ $ End of input file
 EOF
 
   echo "   Screen ouput run_1 routed to ww3_multi.1.out"
-# $path_e/ww3_multi > ww3_multi.1.out
+  $path_e/ww3_multi # > ww3_multi.1.out
 # mpirun -np 16 $path_e/ww3_multi > ww3_multi.1.out
-  poe $path_e/ww3_multi > ww3_multi.1.out
+# poe $path_e/ww3_multi > ww3_multi.1.out
 
   run_time=`grep 'Elapsed time' log.mww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
@@ -214,7 +220,7 @@ EOF
 
   if [ "$run_2" = 'yes' ]
   then
-    mv restart1.grl_mich restart.grl_mich
+    mv restart001.grl_mich restart.grl_mich
   fi
 
 fi
@@ -234,7 +240,8 @@ $
     F F
 $
    20091006 090000   3600  20091008 000000
-  F F T F F  T F F F F  T T F F T  T F T F F  F T F F F  F F F F F  F
+  F F T F F  F T F F F  F F T F F  T T T F T  F F F T F  F F F F F
+  F F F F F  F F F F F  F F F F F  F F F F F  F F F
    20091006 090000   3600  20091008 000000
    273.030  42.696  '45007     '
      0.000   0.000  'STOPSTRING'
@@ -252,9 +259,9 @@ $ End of input file
 EOF
 
   echo "   Screen ouput routed to ww3_multi.2.out"
-# $path_e/ww3_multi > ww3_multi.2.out
+  $path_e/ww3_multi # > ww3_multi.2.out
 # mpirun -np 16 $path_e/ww3_multi > ww3_multi.2.out
-  poe $path_e/ww3_multi > ww3_multi.2.out
+# poe $path_e/ww3_multi > ww3_multi.2.out
 
   run_time=`grep 'Elapsed time' log.mww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
@@ -276,7 +283,8 @@ $ WAVEWATCH III Grid output post-processing
 $ -----------------------------------------
   20091006 000000  3600.  49
 $
-  F F T F F  T F F F F  T T F F T  T F T F F  F T F F F  F F F F F  F
+  F F T F F  F T F F F  F F T F F  T T T F T  F F F T F  F F F F F
+  F F F F F  F F F F F  F F F F F  F F F F F  F F F
 $
   0 999 0 999  T F
 $
@@ -377,9 +385,9 @@ $
   1
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

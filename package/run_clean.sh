@@ -8,9 +8,10 @@
 # 06-Nov-2008 : Add progs and exe directory.                                   #
 # 12-Nov-2008 : Add all_data.ww3.gz files.                                     #
 # 11-Dec-2008 : Add matlab *.m~ files.                                         #
-# 30-Dec-2008 : Disable section 7 (all_data files).
-# 29-Sep-2010 : Add clean up for GrADS maps             
-# 16-Mar-2012 : Add clean up for Intel
+# 30-Dec-2008 : Disable section 7 (all_data files).                            #
+# 29-Sep-2010 : Add clean up for GrADS maps.                                   #
+# 16-Mar-2012 : Add clean up for Intel.                                        #
+# 16-Jul-2012 : Add clean up for buoy.all.                                     #
 #                                                                              #
 #    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -76,6 +77,7 @@
   rm -f matlab/temp_?.sh
   rm -f matlab/temp_?.out
   rm -f matlab/*.eps
+  rm -f buoy.all
 
   if [ "$test" = 'yes' ]
   then

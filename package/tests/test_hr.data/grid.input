@@ -12,6 +12,7 @@ SOURCES
   &MISC PMOVE = 1.0 /
 END OF NAMELISTS
 $
+  'RECT'  F  'NONE'
    523        523
      5.00E3     5.00E3   1.
  -1305.00E3 -1305.00E3   1.

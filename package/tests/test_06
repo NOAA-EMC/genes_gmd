@@ -9,8 +9,9 @@
 #                                      Author      : Hendrik L. Tolman         #
 #                                                                              #
 # 13-Nov-2008 : Origination.                                                   #
+# 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
 #                                                                              #
-#    Copyright 2008-2010 National Weather Service (NWS),                       #
+#    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -113,6 +114,7 @@ if [ -f "$snl" ] ; then
 cat >> ww3_grid.inp << EOF 
 END OF NAMELISTS
 $ 
+  'RECT'  F  'NONE'
    3   3
    1.  1.  1.
   -1. -1.  1.
@@ -303,9 +305,9 @@ $
   1
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

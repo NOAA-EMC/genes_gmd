@@ -34,7 +34,7 @@
 ## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv -convert big_endian"
 
 # comp=pgf90
-# cmpi=mpf90
+# cmpi=mpif90
 # opt="-Mlist -fast"
 ## opt="-Mlist -fast -byteswapio"
 ## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist"

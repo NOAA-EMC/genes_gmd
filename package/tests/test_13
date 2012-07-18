@@ -13,6 +13,7 @@
 #                                                                              #
 # 10-Dec-2008 : Origination.                                                   #
 # 16-Mar-2012 ; Adding MPIT parallel running on 'zeus'.                        #
+# 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
 #                                                                              #
 #    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -114,7 +115,8 @@ cat >> ww3_grid.inp << EOF
   &ANL2 DEPTHS =  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  8., 10.,
                  11., 12., 13., 14., 15., 16., 17., 18., 19., 20. /
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
    21   3 
    250.    10.e3  1.
      0.   -10.e3  1. 
@@ -166,6 +168,7 @@ cat >> ww3_grid.inp << EOF
                  80., 90., 100. /
 END OF NAMELISTS
 $
+  'RECT'  F  'NONE'
    34   3 
      1.E3  100.e3  1.
      0.   -100.e3  1. 
@@ -220,7 +223,8 @@ cat >> ww3_grid.inp << EOF
                  31., 32., 33., 34., 36., 38., 40., 42., 45., 50., 
                  55., 60., 65., 70., 80., 90., 100. /
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
     3   3 
      1.E3   1.E3  1.
     -1.E3  -1.E3  1. 
@@ -582,9 +586,9 @@ $
  47
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

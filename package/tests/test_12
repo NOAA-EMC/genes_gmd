@@ -112,7 +112,8 @@ cat >> ww3_grid.inp << EOF
   &ANL2 DEPTHS =  1.,  2.,  3.,  4.,  5.,  6.,  7.,  8.,  8., 10.,
                  11., 12., 13., 14., 15., 16., 17., 18., 19., 20. /
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
    21   3 
    250.    10.e3  1.
      0.   -10.e3  1. 
@@ -164,6 +165,7 @@ cat >> ww3_grid.inp << EOF
                  80., 90., 100. /
 END OF NAMELISTS
 $
+  'RECT'  F  'NONE'
    34   3 
      1.E3  100.e3  1.
      0.   -100.e3  1. 
@@ -215,6 +217,7 @@ cat >> ww3_grid.inp << EOF
   &ANL2 DEPTHS = 100. /
 END OF NAMELISTS
 $
+  'RECT'  F  'NONE'
    3   3 
     33.E3  100.e3  1.
      0.   -100.e3  1. 
@@ -259,6 +262,7 @@ cat >> ww3_grid.inp << EOF
   &ANL2 DEPTHS = 100. /
 END OF NAMELISTS
 $
+  'RECT'  F  'NONE'
    3   3 
     33.E3  100.e3  1.
      0.   -100.e3  1. 
@@ -306,7 +310,8 @@ cat >> ww3_grid.inp << EOF
                  31., 32., 33., 34., 36., 38., 40., 42., 45., 50.,
                  55., 60., 65., 70., 80., 90., 100. /
 END OF NAMELISTS
-$   
+$
+  'RECT'  F  'NONE'
     3   3 
      1.E6   1.E6  1.
     -1.E6  -1.E6  1. 
@@ -439,7 +444,7 @@ EOF
   run_time=`grep 'Elapsed time' log.mww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
 
-  mv restart1.grd3 restart.grd3
+  mv restart001.grd3 restart.grd3
   mv mod_def.grd3d mod_def.grd3
   mv log.mww3 log.1.mww3
   mv log.grd3 log.1.grd3
@@ -482,8 +487,8 @@ EOF
   run_time=`grep 'Elapsed time' log.mww3 | awk '{ print $4}'`
   echo "      Run time : $run_time s"
 
-  mv restart1.grd2 restart.grd2
-  mv restart1.grd3 restart.grd3
+  mv restart001.grd2 restart.grd2
+  mv restart001.grd3 restart.grd3
   mv log.mww3 log.2.mww3
   mv log.grd2 log.2.grd2
   mv log.grd3 log.2.grd3
@@ -797,9 +802,9 @@ $
  47
  -1
 $
-  1
+  4
 $
-  4  0.  0.  52  T
+  1  52  19680606 010000   'UTC'
 EOF
 
   echo "      Screen output routed to ww3_op_3.out"

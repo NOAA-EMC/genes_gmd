@@ -12,6 +12,7 @@
 #                                                                              #
 # 19-Mar-2012 : Origination.                                                   #
 # 24-Mar-2012 : Error capturing for mjobctl added.                             #
+# 18-Jul-2012 : Change mjobctl -c to qdel.                                     #
 #                                                                              #
 #    Copyright 2012 National Weather Service (NWS),                            #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -32,7 +33,7 @@
     if [ -n $tdata ]
     then
       set +e
-      mjobctl -c $tdata > g_engine.cancel 2> /dev/null
+      qdel $tdata > g_engine.cancel 2> /dev/null
       set -e
       sleep 5
     fi

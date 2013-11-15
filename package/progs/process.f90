@@ -5,7 +5,7 @@
 !/                  | WAVEWATCH III           NOAA/NCEP |
 !/                  |           H. L. Tolman            |
 !/                  |                        FORTRAN 90 |
-!/                  | Last update :         22-Oct-2010 |
+!/                  | Last update :         08-Oct-2013 |
 !/                  +-----------------------------------+
 !/
 !/    13-Nov-2008 : Origination.
@@ -16,8 +16,9 @@
 !/    04-Feb-2010 : Fix FORMAT warnings.
 !/    20-Oct-2010 : Fix bug in reading TX, TY from part?.ww3
 !/    22-Oct-2010 : Adjust T0 for Great Lakes test case.
+!/    08-Oct-2013 : Fix bug in error output 1005.
 !/
-!/    Copyright 2008-2010 National Weather Service (NWS),
+!/    Copyright 2008-2013 National Weather Service (NWS),
 !/       National Oceanic and Atmospheric Administration.  All rights
 !/       reserved.  iDistributed as part of WAVEWATCH III. WAVEWATCH III
 !/       is a trademark of the NWS.
@@ -1051,7 +1052,7 @@
       STOP
 !
   805 CONTINUE
-      WRITE (*,1005) NFR, NTH, NRQ, GNAME, NRT, NTT, NRT, TNAME
+      WRITE (*,1005) NFR, NTH, NRQ, GNAME, NFT, NTT, NRT, TNAME
       STOP
 !
   806 CONTINUE

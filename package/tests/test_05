@@ -16,8 +16,9 @@
 # 24-Nov-2009 ; Starting with much larger time step.                           #
 # 16-Mar-2012 ; Adding MPIT parallel running on 'zeus'.                        #
 # 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
+# 07-Oct-2013 ; Fix documentation, using proper test number.                   #
 #                                                                              #
-#    Copyright 2008-2012 National Weather Service (NWS),                       #
+#    Copyright 2008-2013 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
 #       reserved.  Distributed as part of WAVEWATCH III. WAVEWATCH III is a    #
 #       trademark of the NWS. No unauthorized use without permission.          #
@@ -31,7 +32,7 @@
   echo ' ' ; echo ' '
   echo '                  ======> TEST RUN WAVEWATCH III <====== '
   echo '                    ==================================   '
-  echo '                                   slanting fetch growth test test_06'
+  echo '                                   slanting fetch growth test test_05'
   echo '                                   constant wind speed and direction'
   echo ' '
 
@@ -100,7 +101,7 @@
 cat > ww3_grid.inp << EOF 
 $ WAVEWATCH III Grid preprocessor input file
 $ ------------------------------------------
-  'test_06: Slanting fetch        '
+  'test_05: Slanting fetch        '
 $ 
 EOF
 cat $genes_main/$grid   >> ww3_grid.inp
@@ -143,7 +144,7 @@ EOF
 cat > ww3_grid.inp << EOF 
 $ WAVEWATCH III Grid preprocessor input file
 $ ------------------------------------------
-  'test_06: Slanting fetch        '
+  'test_05: Slanting fetch        '
 $ 
 EOF
 cat $genes_main/$grid   >> ww3_grid.inp

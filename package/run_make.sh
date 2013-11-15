@@ -26,16 +26,16 @@
   setup='.genes.env'
   mpi='yes'
 
-  comp=ifort
-  cmpi="ifort -lmpi"
-  opt="-list -O3 -xSSE4.2 -ip"
+# comp=ifort
+# cmpi="ifort -lmpi"
+# opt="-list -O3 -xSSE4.2 -ip"
 ## opt="-list -O3 -xSSE4.2 -ip -convert big_endian"
 ## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv"
 ## opt="-list -O0 -g -traceback -check all -fpe0 -ftrapuv -convert big_endian"
 
-# comp=pgf90
-# cmpi=mpif90
-# opt="-Mlist -fast"
+  comp=pgf90
+  cmpi=mpif90
+  opt="-Mlist -fast"
 ## opt="-Mlist -fast -byteswapio"
 ## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist"
 ## opt="-O0 -g -traceback -Mbounds -Mchkfpstk -Mchkptr -Mchkstk -Mlist -byteswapio"

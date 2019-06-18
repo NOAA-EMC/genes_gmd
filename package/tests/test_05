@@ -17,6 +17,7 @@
 # 16-Mar-2012 ; Adding MPIT parallel running on 'zeus'.                        #
 # 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
 # 07-Oct-2013 ; Fix documentation, using proper test number.                   #
+# 30-Oct-1016 : Adapting to WW3 version 5.16.
 #                                                                              #
 #    Copyright 2008-2013 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -498,7 +499,7 @@ $
 $
   3
 $
-  4  0. 0. 52   F F T F F F  0  T
+  4  0. 0. 52   F F T F F F F  0  T
 EOF
 
   echo "      Screen output routed to ww3_op_2.out"
@@ -642,7 +643,7 @@ $
  50
  -1
 $
-  T T T T T T
+  T T T T T T T
 EOF
 
     echo "   Screen output routed to gx_outp.out"

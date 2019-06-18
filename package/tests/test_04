@@ -11,6 +11,7 @@
 # 27-Oct-2008 : Origination.                                                   #
 # 03-Nov-2008 ; Adding partitioned output.                                     #
 # 16-Jul-2012 ; Adapting to WW3 version 4.08.                                  #
+# 30-Oct-1016 : Adapting to WW3 version 5.16.
 #                                                                              #
 #    Copyright 2008-2012 National Weather Service (NWS),                       #
 #       National Oceanic and Atmospheric Administration.  All rights           #
@@ -257,7 +258,7 @@ $
 $
   3
 $
-  4  0. 0. 52   F F T F F F  0  T
+  4  0. 0. 52   F F T F F F F  0  T
 EOF
 
   echo "      Screen output routed to ww3_op_2.out"
@@ -303,7 +304,7 @@ $
   1
  -1
 $
-  T T T T T T
+  T T T T T T T
 EOF
 
     echo "   Screen output routed to gx_outp.out"
